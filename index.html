@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ideal Orzulari Xususiy Maktabi - Videodarslar</title>
+
+<style>
+:root{
+    --primary:#1F4DA0;
+    --primary-light:#3B66C5;
+    --text:#222222;
+    --bg:#F3F5F9;
+    --card-bg:#FFFFFF;
+    --radius:18px;
+    --shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+
+body{
+    margin:0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* HEADER */
+header{
+    display:flex;
+    align-items:center;
+    padding:20px 40px;
+    background:var(--primary);
+    color:white;
+    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+}
+
+header h1{
+    font-size:32px;
+    font-weight:700;
+    text-align:center;
+    flex:1;
+}
+
+/* CONTAINER */
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:30px 20px;
+}
+
+/* FANLAR */
+h2{
+    text-align:center;
+    font-size:28px;
+    margin-bottom:30px;
+    color:var(--primary);
+}
+
+.subjects{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.subject-card{
+    background:var(--card-bg);
+    padding:25px;
+    border-radius:var(--radius);
+    text-align:center;
+    font-size:20px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    border:1px solid #e0e3eb;
+    transition:0.3s;
+}
+
+.subject-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+    border-color:var(--primary);
+}
+
+/* VIDEO SECTION */
+.videos{
+    display:none;
+    animation:fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+.video-box{
+    background:var(--card-bg);
+    padding:20px;
+    border-radius:var(--radius);
+    margin-bottom:30px;
+    box-shadow:var(--shadow);
+    border:1px solid #e3e6ee;
+}
+
+video{
+    width:100%;
+    border-radius:var(--radius);
+    margin-top:10px;
+    box-shadow:0 12px 25px rgba(0,0,0,0.15);
+}
+
+/* BUTTONS */
+button, .back{
+    background:var(--primary);
+    color:white;
+    border:none;
+    border-radius:12px;
+    padding:10px 20px;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+button:hover, .back:hover{
+    background:var(--primary-light);
+}
+
+/* UPLOAD SECTION */
+upload-section{
+    background:var(--card-bg);
+    padding:25px;
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-top:40px;
+    display:none;
+    border:1px solid #e3e5ee;
+}
+
+input, select{
+    padding:12px;
+    width:100%;
+    border-radius:12px;
+    border:1px solid #d5d8e1;
+    margin-top:12px;
+    font-size:15px;
+}
+
+@media(max-width:600px){
+    header{flex-direction:column;text-align:center;}
+    header h1{font-size:24px;margin-top:10px;}
+    video{height:200px;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>IDEAL ORZULARI XUSUSIY MAKTABI — VIDEODARSLAR</h1>
+</header>
+
+<div class="container">
+
+<h2>Fanlar</h2>
+
+<div class="subjects" id="subjectList">
+    <div class="subject-card" onclick="openSubject('matematika')">📘 Matematika</div>
+    <div class="subject-card" onclick="openSubject('ingliz')">📗 Ingliz tili</div>
+    <div class="subject-card" onclick="openSubject('ona')">📙 Ona tili</div>
+    <div class="subject-card" onclick="openSubject('fizika')">📕 Fizika</div>
+    <div class="subject-card" onclick="openSubject('kimyo')">🧪 Kimyo</div>
+    <div class="subject-card" onclick="openSubject('biologiya')">🌿 Biologiya</div>
+    <div class="subject-card" onclick="openSubject('tarix')">📜 Tarix</div>
+    <div class="subject-card" onclick="openSubject('rus')">🇷🇺 Rus tili</div>
+</div>
+
+<div class="videos" id="videoSection">
+    <a class="back" onclick="goBack()">⬅️ Orqaga</a>
+    <h2 id="subjectTitle"></h2>
+    <div id="videoList"></div>
+</div>
+
+<div class="upload-section" id="uploadPanel">
+<h2>Video yuklash</h2>
+<input type="file" id="videoFile" accept="video/*">
+<input type="text" id="videoTitle" placeholder="Videoning nomi">
+<select id="videoSubject">
+    <option value="matematika">Matematika</option>
+    <option value="ingliz">Ingliz tili</option>
+    <option value="ona">Ona tili</option>
+    <option value="fizika">Fizika</option>
+    <option value="kimyo">Kimyo</option>
+    <option value="biologiya">Biologiya</option>
+    <option value="tarix">Tarix</option>
+    <option value="rus">Rus tili</option>
+</select>
+<button onclick="uploadVideo()">Yuklash</button>
+<p id="uploadMsg" style="color:green;font-weight:600;"></p>
+</div>
+
+<button style="margin-top:20px;" onclick="checkAdmin()">🔐 Admin kirish</button>
+
+</div>
+
+<script>
+const adminPassword = "7000007";
+let isAdmin = false;
+
+const videos = JSON.parse(localStorage.getItem("videos") || 
+'{"matematika":[],"ingliz":[],"ona":[],"fizika":[],"kimyo":[],"biologiya":[],"tarix":[],"rus":[]}');
+
+function saveVideos(){
+    localStorage.setItem("videos", JSON.stringify(videos));
+}
+
+function openSubject(subject){
+    document.getElementById("subjectList").style.display = "none";
+    document.getElementById("videoSection").style.display = "block";
+    document.getElementById("subjectTitle").innerText = subject.toUpperCase();
+
+    const list = videos[subject].map((v,i)=>`
+        <div class="video-box">
+            <h3>${v.title}</h3>
+            <video controls>
+                <source src="${v.url}">
+            </video>
+            ${isAdmin ? `
+            <button onclick="editVideo('${subject}',${i})">Tahrirlash</button>
+            <button onclick="deleteVideo('${subject}',${i})">O‘chirish</button>
+            ` : ''}
+        </div>
+    `).join("");
+
+    document.getElementById("videoList").innerHTML = list || "<p>Hozircha video yo‘q</p>";
+}
+
+function goBack(){
+    document.getElementById("videoSection").style.display = "none";
+    document.getElementById("subjectList").style.display = "grid";
+}
+
+function checkAdmin(){
+    const pwd = prompt("Admin parolini kiriting:");
+    if(pwd === adminPassword){
+        isAdmin = true;
+        document.getElementById("uploadPanel").style.display = "block";
+    }else{
+        alert("Parol noto‘g‘ri!");
+    }
+}
+
+function uploadVideo(){
+    if(!isAdmin) return alert("Siz admin emassiz.");
+
+    const f = document.getElementById("videoFile").files[0];
+    const title = document.getElementById("videoTitle").value;
+    const subj = document.getElementById("videoSubject").value;
+
+    if(!f || !title) return alert("Ma'lumotlar to‘liq emas!");
+
+    const url = URL.createObjectURL(f);
+
+    videos[subj].push({title:title, url:url});
+    saveVideos();
+
+    document.getElementById("uploadMsg").innerText = "Video yuklandi!";
+    openSubject(subj);
+}
+
+function editVideo(s,i){
+    const newName = prompt("Yangi nom:", videos[s][i].title);
+    if(newName){
+        videos[s][i].title = newName;
+        saveVideos();
+        openSubject(s);
+    }
+}
+
+function deleteVideo(s,i){
+    if(confirm("Rostdan ham o‘chirmoqchimisiz?")){
+        videos[s].splice(i,1);
+        saveVideos();
+        openSubject(s);
+    }
+}
+</script>
+
+</body>
+</html>
